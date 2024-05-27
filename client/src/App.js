@@ -3,7 +3,8 @@ import axios from 'axios';
 
 const App = () => {
   const [accessToken, setAccessToken] = useState('');
-  const [videoId, setVideoId] = useState('950642144'); // Hardcoded Vimeo video ID
+  const videoId = '950642144'; // Hardcoded Vimeo video ID
+  const [showPlayer, setShowPlayer] = useState(false); // Flag to control when to show the player
 
   const generateAccessToken = async () => {
     try {
@@ -15,22 +16,32 @@ const App = () => {
     }
   };
 
+  const showVideoPlayer = () => {
+    setShowPlayer(true); // Show the player after clicking the button
+  };
+
   return (
     <div>
       <h1>Vimeo API Authentication</h1>
       <button onClick={generateAccessToken}>Generate Access Token</button>
       {accessToken && <p>Access Token: {accessToken}</p>}
-      <div>
-        {/* Replace '950642144' with the dynamic video ID */}
-        <iframe
-          src={`https://player.vimeo.com/video/${videoId}`}
-          width="640"
-          height="360"
-          frameBorder="0"
-          allowFullScreen
-          title="Vimeo Video Player"
-        ></iframe>
-      </div>
+      {showPlayer && (
+        <div>
+          <iframe
+            src={`https://player.vimeo.com/video/${videoId}?access_token=${accessToken}`}
+            width="640"
+            height="360"
+            frameBorder="0"
+            allowFullScreen
+            title="Vimeo Video Player"
+          ></iframe>
+        </div>
+      )}
+      {!showPlayer && (
+        <div>
+          <button onClick={showVideoPlayer}>Play Video</button>
+        </div>
+      )}
     </div>
   );
 };
